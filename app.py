@@ -17,7 +17,6 @@ from embedchain.helpers.callbacks import (StreamingStdOutCallbackHandlerYield,
                                           generate)
 from web_page import WebPageLoader
 import json
-# os.environ["OPENAI_API_KEY"]=""
 
 def read_json(name):
     file_path = name
@@ -52,7 +51,6 @@ def add_data(arr_of_links,type):
 app=modiJi()
 
 assistant_avatar_url="modiJiWithTurban.png"
-modiji_avatar="modiJiWithTurban.png"
 
 #adding 3000 pmo links
 add_data(arr_of_links=pmo_links, type="web_page")
@@ -64,12 +62,24 @@ st.markdown("<h1 style='text-align: center; color: #aaa;'>PM OFFICE AI 🇮🇳<
 
 styled_caption = '<p style="font-size: 18px; color: #aaa;">🇮🇳 Made by <a href="https://www.linkedin.com/in/basantsingh1000/">Basant Singh</a> powered by <a href="https://github.com/embedchain/embedchain">Embedchain</a></p>'  # noqa: E501
 st.markdown(styled_caption, unsafe_allow_html=True)  
-st.markdown('<p style="font-size: 10px; color: #aaa;">not associated with PM OFFICE🇮🇳 or BJP🪷</p>',unsafe_allow_html=True)
+st.markdown('<p style="font-size: 10px; color: #aaa;">not associated with PM OFFICE🇮🇳 or Narendra Modi</p>',unsafe_allow_html=True)
 
 #copied from streamlit community
-left_co, cent_co,last_co = st.columns(3)
-with cent_co:
-    st.image(modiji_avatar)
+# left_co, cent_co,last_co = st.columns(3)
+# with left_co:
+#     st.image("🇮🇳")
+st.markdown("""
+<style>
+  .st-emotion-cache-p4micv.eeusbqq0 {
+    width: 10%;      
+    height: 10%;     
+    object-fit: cover; 
+    padding-top: 0;
+    margin-top: 0;
+  }
+</style>
+# """, unsafe_allow_html=True)
+
 
 
 
@@ -94,10 +104,9 @@ I source knowlege from non-political PMO website but as an AI model I can halluc
 
 
 prompt_for_llm = """
-You are AI assistant tasked to answer questions based on context only. 
+You are AI assistant tasked to answer questions based on given context only. Donot fabricate or concoat the answer if outside context.
 
-### If its outside context answer "Outside Context."
-### answer should be not too lengthy.
+### answer should not be lengthy.
 
 Context information:
 ----------------------
