@@ -18,6 +18,7 @@ from embedchain.helpers.callbacks import (StreamingStdOutCallbackHandlerYield,
 from web_page import WebPageLoader
 import json
 
+#function to read json array and return to python array
 def read_json(name):
     file_path = name
     with open(file_path, 'r') as json_file:
@@ -26,17 +27,18 @@ def read_json(name):
 
 
 
+#adding data soruce of pm office and prime minister of india into python array.
 pmo_links=read_json("pmo_links.json")
-
 mann_ki_baat=read_json("mann-ki-baat.json")
 
 @st.cache_resource
-def modiJi():
+def pmo():
     app=App()
     return app
 
 
-
+#function to add data into vector db
+#it takes python array as an input
 @st.cache_resource
 def add_data(arr_of_links,type):
     n=len(arr_of_links)
@@ -48,26 +50,25 @@ def add_data(arr_of_links,type):
             print("missed",i,arr_of_links[i])
 
 
-app=modiJi()
+#initilize app object
+app=pmo()
 
+#logo
 assistant_avatar_url="modiJiWithTurban.png"
 
-#adding 3000 pmo links
+#adding nearabout 3000 pmo links
 add_data(arr_of_links=pmo_links, type="web_page")
 
 
 
-
+#some html markup
 st.markdown("<h1 style='text-align: center; color: #aaa;'>PM OFFICE AI 🇮🇳</h1>", unsafe_allow_html=True)
-
 styled_caption = '<p style="font-size: 18px; color: #aaa;">🇮🇳 Made by <a href="https://www.linkedin.com/in/basantsingh1000/">Basant Singh</a> powered by <a href="https://github.com/embedchain/embedchain">Embedchain</a></p>'  # noqa: E501
 st.markdown(styled_caption, unsafe_allow_html=True)  
 st.markdown('<p style="font-size: 10px; color: #aaa;">not associated with PM OFFICE🇮🇳 or Narendra Modi</p>',unsafe_allow_html=True)
 
-#copied from streamlit community
-# left_co, cent_co,last_co = st.columns(3)
-# with left_co:
-#     st.image("🇮🇳")
+
+#adjusting size of logo
 st.markdown("""
 <style>
   .st-emotion-cache-p4micv.eeusbqq0 {
@@ -79,6 +80,12 @@ st.markdown("""
   }
 </style>
 # """, unsafe_allow_html=True)
+
+col1, col2, col3 = st.beta_columns([1,6,1])
+
+
+with col2:
+st.image("flag_of_india.png")
 
 
 
@@ -102,11 +109,11 @@ I source knowlege from non-political PMO website but as an AI model I can halluc
     ]
 
 
-
+#define prompt
 prompt_for_llm = """
 You are AI assistant tasked to answer questions based on given context only. Donot fabricate or concoat the answer if outside context.
 
-### answer should not be lengthy.
+### answer in brief format. 
 
 Context information:
 ----------------------
@@ -117,6 +124,7 @@ Query: $query
 Answer:
 """
 
+#this logic takes user prompt from UI and return RAG output from llm, also it returns in streaming format
 for message in st.session_state.messages:
     role=message['role']
     with st.chat_message(role,avatar=assistant_avatar_url if role == "assistant" else None):
@@ -143,7 +151,7 @@ if prompt := st.chat_input("Pls ask one question at a time. "):
             result["citations"] = citations
 
 
-        #this code produces streaming output using threads, logic might be different in other frameorks like langchain
+        #this code produces streaming output using threads, logic might be different in other frameorks like langchain/
         results = {}
         thread = threading.Thread(target=app_response, args=(results,))
         thread.start()

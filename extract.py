@@ -38,20 +38,23 @@ def filter_english_url(arr_of_txt):
     matches = [element for element in arr_of_txt if pattern.search(element)]
     return matches
 
+#python array to json
 def array_to_json(name,array):
     file_path = name
     with open(file_path, 'w') as json_file:
         json.dump(array, json_file)
 
+#reads json array and return to python
 def read_json(name):
     file_path = name
     with open(file_path, 'r') as json_file:
         python_array = json.load(json_file)
         return python_array
 
-
+#this scraps data from offical PM website.
+#Do-note its perfectly legal to scrap data and cite source 
+# given that its not presneted in deogratry manner
 def return_url_txt(driver):
-    # url = "https://www.pmindia.gov.in/en/mann-ki-baat/"
     url = "https://www.pmindia.gov.in/en/news-updates/"
     pdf_urls = []
     driver.get(url)
@@ -89,6 +92,17 @@ def return_url_txt(driver):
     print("array returned-> ")
 
     return pdf_urls
+
+cnt=0
+for x in read_json("pmo_links.json"):
+    cnt+=1
+    if x =="https://www.pmindia.gov.in/en/news_updates/pm-shares-pictures-of-kashi-on-maha-shivratri/?comment=disable":
+        print(cnt)
+
+
+
+#demo runs
+
 
 
 
