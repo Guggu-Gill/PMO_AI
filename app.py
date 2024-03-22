@@ -15,10 +15,15 @@ from embedchain import App
 from embedchain.config import BaseLlmConfig
 from embedchain.helpers.callbacks import (StreamingStdOutCallbackHandlerYield,
                                           generate)
-from extract import read_json
 from web_page import WebPageLoader
 
 # os.environ["OPENAI_API_KEY"]=""
+
+def read_json(name):
+    file_path = name
+    with open(file_path, 'r') as json_file:
+        python_array = json.load(json_file)
+        return python_array
 
 
 
