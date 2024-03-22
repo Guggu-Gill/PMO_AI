@@ -2,4 +2,3 @@ matplotlib
 streamlit
 embedchain
 pysqlite3-binary
-json
