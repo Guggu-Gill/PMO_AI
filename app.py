@@ -81,7 +81,7 @@ st.markdown("""
 </style>
 # """, unsafe_allow_html=True)
 
-col1, col2, col3 = st.beta_columns([1,6,1])
+col1, col2, col3 = st.columns([1,2,1])
 
 
 with col2:
