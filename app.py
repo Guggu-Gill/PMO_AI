@@ -85,7 +85,7 @@ col1, col2, col3 = st.beta_columns([1,6,1])
 
 
 with col2:
-st.image("flag_of_india.png")
+    st.image("flag_of_india.png")
 
 
 
