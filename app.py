@@ -192,7 +192,7 @@ if prompt := st.chat_input("Pls ask one question at a time. "):
 
 
         def app_response(result):
-            print_or_not,text_to_print=filter_query(prompt_for_llm)
+            print_or_not,text_to_print=filter_query(prompt)
             if print_or_not:
                 config = BaseLlmConfig(prompt=prompt_for_llm,stream=True, callbacks=[StreamingStdOutCallbackHandlerYield(q)])
                 answer, citations = app.chat(prompt, config=config, citations=True)
