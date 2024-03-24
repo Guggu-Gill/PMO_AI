@@ -76,7 +76,6 @@ def return_url_txt(driver):
     time.sleep(10)
 
 
-
     
     html_content = driver.page_source
 
@@ -93,11 +92,65 @@ def return_url_txt(driver):
 
     return pdf_urls
 
-cnt=0
-for x in read_json("pmo_links.json"):
-    cnt+=1
-    if x =="https://www.pmindia.gov.in/en/news_updates/pm-shares-pictures-of-kashi-on-maha-shivratri/?comment=disable":
-        print(cnt)
+
+def return_url_mann_ki(driver):
+    url = "https://www.pmindia.gov.in/en/tag/mann-ki-baat/"
+    pdf_urls = []
+    driver.get(url)
+
+    WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, "//div[@class='news-description']")))
+
+    last_height = driver.execute_script("return document.body.scrollHeight")
+    print("1. it started working")
+    while True:
+        print("2. in a loop")
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(8)  # Adjust the interval (in seconds) as needed
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            break
+        last_height = new_height
+
+    print("3. parsing started->")
+    time.sleep(10)
+
+
+    
+    html_content = driver.page_source
+
+    aside_pattern = r'<div class="news-description">(.*?)</div>'
+    link_pattern = r'<a[^>]*href="([^"]*)"'
+
+    div_matches = re.findall(aside_pattern, html_content, re.DOTALL)
+
+    for div_match in div_matches:
+        pdf_links = re.findall(link_pattern, div_match)
+        for link in pdf_links:
+            pdf_urls.append(link)
+    print("array returned-> ")
+
+    return pdf_urls
+
+
+
+
+#initilizing driver for scrapping from https://www.pmindia.gov.in/en/news-updates/
+
+options = webdriver.ChromeOptions()
+options.add_argument("--headless") 
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107 Safari/537.36")
+driver = webdriver.Chrome(options=options)
+
+
+
+
+#script to scarp links from pmo https://www.pmindia.gov.in/en/news-updates/"
+output=return_url_mann_ki(driver)
+print(output)
+print(len(output))
+#saving pmo links into json
+array_to_json("mann-ki-baat-txt.json",output)
+
 
 
 

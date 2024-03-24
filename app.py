@@ -29,7 +29,7 @@ def read_json(name):
 
 #adding data soruce of pm office and prime minister of india into python array.
 pmo_links=read_json("pmo_links.json")
-mann_ki_baat=read_json("mann-ki-baat.json")
+mann_ki_baat=read_json("mann-ki-baat-txt.json")
 
 @st.cache_resource
 def pmo():
@@ -55,6 +55,10 @@ app=pmo()
 
 #logo
 assistant_avatar_url="modiJiWithTurban.png"
+
+#adding nearbout 110 mankitbat links
+
+add_data(arr_of_links=pmo_links,type="web_page")
 
 #adding nearabout 3000 pmo links
 add_data(arr_of_links=pmo_links, type="web_page")
