@@ -102,7 +102,7 @@ assistant_avatar_url="modiJiWithTurban.png"
 
 #adding nearbout 110 mankitbat links
 
-add_data(arr_of_links=pmo_links,type="web_page")
+add_data(arr_of_links=mann_ki_baat,type="web_page")
 
 #adding nearabout 3000 pmo links
 add_data(arr_of_links=pmo_links, type="web_page")
@@ -193,9 +193,14 @@ if prompt := st.chat_input("Pls ask one question at a time. "):
 
         def app_response(result):
             config = BaseLlmConfig(prompt=prompt_for_llm,stream=True, callbacks=[StreamingStdOutCallbackHandlerYield(q)])
-            answer, citations = app.chat(prompt, config=config, citations=True)
-            result["answer"] = answer
-            result["citations"] = citations
+            rs,text=filter_query(prompt)
+            if rs:
+                answer, citations = app.chat(prompt, config=config, citations=True)
+                result["answer"] = answer
+                result["citations"] = citations
+            else:
+                result["answer"] = text
+                result["citations"] = []
 
         #this code produces streaming output using threads, logic might be different in other frameorks like langchain/
         results = {}
