@@ -200,6 +200,7 @@ if prompt := st.chat_input("Pls ask one question at a time. "):
                 result["citations"] = citations
             else:
                 result["answer"]=text_to_print
+                result["citations"] = []
 
 
         #this code produces streaming output using threads, logic might be different in other frameorks like langchain/
