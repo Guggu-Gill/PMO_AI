@@ -18,6 +18,50 @@ from embedchain.helpers.callbacks import (StreamingStdOutCallbackHandlerYield,
 from web_page import WebPageLoader
 import json
 
+
+
+def count_non_char_tokens(input_string):
+    non_char_pattern = re.compile((r'[^a-zA-Z\s]'))
+    non_char_tokens = non_char_pattern.findall(str(input_string))
+    return len(non_char_tokens)
+
+
+def open_file(file_path):
+  file_path = file_path
+  arr=[]
+  try:
+    with open(file_path, "r") as f:
+      for line in f:
+        arr.append(line.strip())
+  except FileNotFoundError:
+    return "Error: File {} not found".format(file_path)
+  return set(arr)
+
+
+
+MAX_LENGTH = 100
+def filter_query(query):
+  query_arr = query.lower().split()
+  BLACKLISTED_WORDS =open_file("bad-words.txt")
+  n=int(len(query_arr))
+  n_pr=int(count_non_char_tokens(query))
+
+  if n > MAX_LENGTH:
+    return False,"QUERY FILTERED: Max token length exceeded"
+  elif any(word in query_arr for word in BLACKLISTED_WORDS):
+    return False,"QUERY FILTERED: BLACKLISTED_WORDS found."
+  elif n<4:
+    return False,"QUERY FILTERED: Less than 4 tokens in query."
+  elif n_pr>=4:
+    return False, "QUERY FILTERED cond 1: Try changing Prompt."
+  elif n_pr-n>=4:
+    return False, "QUERY FILTERED cond 2: Try changing Prompt."
+  elif len(query)<=12:
+    return False, "QUERY FILTERED cond 3: Try longer Prompt"
+  else:
+    return True," "
+
+
 #function to read json array and return to python array
 def read_json(name):
     file_path = name
@@ -106,7 +150,6 @@ if "messages" not in st.session_state:
 Hi, I am PM OFFICE AI on duty of Prime Minister of India🇮🇳.
 I source knowlege from non-political PMO website but as an AI model I can hallucinate, Always rely on Govt Of India🇮🇳 expert.
 \n
-
 """,
 
         }
@@ -149,10 +192,14 @@ if prompt := st.chat_input("Pls ask one question at a time. "):
 
 
         def app_response(result):
-            config = BaseLlmConfig(prompt=prompt_for_llm,stream=True, callbacks=[StreamingStdOutCallbackHandlerYield(q)])
-            answer, citations = app.chat(prompt, config=config, citations=True)
-            result["answer"] = answer
-            result["citations"] = citations
+            print_or_not,text_to_print=filter_query(prompt_for_llm)
+            if print_or_not:
+                config = BaseLlmConfig(prompt=prompt_for_llm,stream=True, callbacks=[StreamingStdOutCallbackHandlerYield(q)])
+                answer, citations = app.chat(prompt, config=config, citations=True)
+                result["answer"] = answer
+                result["citations"] = citations
+            else:
+                result["answer"]=text_to_print
 
 
         #this code produces streaming output using threads, logic might be different in other frameorks like langchain/
