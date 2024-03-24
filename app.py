@@ -18,7 +18,7 @@ from embedchain.helpers.callbacks import (StreamingStdOutCallbackHandlerYield,
 from web_page import WebPageLoader
 import json
 
-
+import re
 
 def count_non_char_tokens(input_string):
     non_char_pattern = re.compile((r'[^a-zA-Z\s]'))
