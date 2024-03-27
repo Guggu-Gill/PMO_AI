@@ -15,12 +15,16 @@ from embedchain import App
 from embedchain.config import BaseLlmConfig
 from embedchain.helpers.callbacks import (StreamingStdOutCallbackHandlerYield,
                                           generate)
-from web_page import WebPageLoader
+from pre_process.web_page import WebPageLoader
 import json
 
 import re
 
+#enter ur own key
+os.environ['OPENAI_API_KEY']="sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
+#by default it uses GPT-3.5-turbo
+#ada-002 as embedder
 
 #function to read json array and return to python array
 def read_json(name):
@@ -32,8 +36,8 @@ def read_json(name):
 
 
 #adding data soruce of pm office and prime minister of india into python array.
-pmo_links=read_json("pmo_links.json")
-mann_ki_baat=read_json("mann-ki-baat-txt.json")
+pmo_links=read_json("data_source/pmo_links.json")
+mann_ki_baat=read_json("data_source/mann-ki-baat-txt.json")
 
 @st.cache_resource
 def pmo():
@@ -58,7 +62,7 @@ def add_data(arr_of_links,type):
 app=pmo()
 
 #logo
-assistant_avatar_url="modiJiWithTurban.png"
+assistant_avatar_url="avatars/modiJiWithTurban.png"
 
 #adding nearbout 110 mankitbat links
 
@@ -93,7 +97,7 @@ col1, col2, col3 = st.columns([1,6,1])
 
 
 with col2:
-    st.image("prime-minister-office.png")
+    st.image("avatars/prime-minister-office.png")
 
 
 
