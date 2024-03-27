@@ -20,11 +20,27 @@ import json
 
 import re
 
-#enter ur own key
-# os.environ['OPENAI_API_KEY']="sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+config = {
+    'embedder': {
+        'provider':'openai',
+        'config': {
+            'model':'text-embedding-3-small'
+                  }
+               },
+    "llm": {
+        "provider": "openai",
+        "config": {
+            "model": "gpt-3.5-turbo-0125",
+            "temperature":0.5,
+            "stream":True
+        }
+        }
+        }
 
-#by default it uses GPT-3.5-turbo
-#ada-002 as embedder
+
+#enter ur own key
+# os.environ['OPENAI_API_KEY']="sk-xxxx"
+
 
 #function to read json array and return to python array
 def read_json(name):
@@ -40,8 +56,8 @@ pmo_links=read_json("data_source/pmo_links.json")
 mann_ki_baat=read_json("data_source/mann-ki-baat-txt.json")
 
 @st.cache_resource
-def pmo():
-    app=App()
+def pmo(config):
+    app=App.from_config(config=config)    
     return app
 
 
@@ -59,7 +75,7 @@ def add_data(arr_of_links,type):
 
 
 #initilize app object
-app=pmo()
+app=pmo(config=config)
 
 #logo
 assistant_avatar_url="avatars/modiJiWithTurban.png"
