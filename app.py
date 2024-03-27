@@ -21,7 +21,7 @@ import json
 import re
 
 #enter ur own key
-os.environ['OPENAI_API_KEY']="sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+# os.environ['OPENAI_API_KEY']="sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 #by default it uses GPT-3.5-turbo
 #ada-002 as embedder
